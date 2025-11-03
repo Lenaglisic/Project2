@@ -59,3 +59,24 @@ private:
             heapifyDown(largest);
         }
     }
+
+public:
+    void insert(Task t) {
+        heap.push_back(t);
+        heapifyUp(heap.size() - 1);
+    }
+    Task getTop() {
+        if (heap.empty()) {
+            throw runtime_error("Heap is empty");
+        }
+        return heap[0];
+    }
+    void pop() {
+        if (heap.empty()){
+            throw runtime_error("Heap is empty");
+        }
+        heap[0] = heap.back();
+        heap.pop_back();
+        heapifyDown(0);
+    }
+};
