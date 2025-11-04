@@ -5,64 +5,45 @@
 #ifndef FIBONACCIHEAP_H
 #define FIBONACCIHEAP_H
 
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <unordered_map>
 #include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
 
-// Task structure
 struct Task {
     int id;
-    std::string name;
+    string name;
     int priority;
-    int startTime;
-    int duration;
-    int deadline;
-
-    Task(int id_, std::string name_, int priority_, int start_, int dur_, int dead_)
-        : id(id_), name(std::move(name_)), priority(priority_),
-          startTime(start_), duration(dur_), deadline(dead_) {}
+    Task(int i, string n, int p);
 };
 
-// Node used by Fibonacci Heap
-struct FibNode {
-    Task task;
-    FibNode* parent;
-    FibNode* child;
-    FibNode* left;
-    FibNode* right;
-    int degree;
-    bool mark;
-
-    explicit FibNode(const Task& t)
-        : task(t), parent(nullptr), child(nullptr),
-          left(this), right(this), degree(0), mark(false) {}
-};
-
-// Fibonacci Heap class definition
 class FibonacciHeap {
 private:
-    FibNode* minNode;  // pointer to node with highest priority (lowest key)
+    struct Node {
+        Task task;
+        Node* parent;
+        Node* child;
+        Node* left;
+        Node* right;
+        int degree;
+        bool mark;
+        Node(Task t);
+    };
+
+    Node* minNode;
     int nodeCount;
 
-    void link(FibNode* y, FibNode* x);
+    void link(Node* y, Node* x);
     void consolidate();
-    void cut(FibNode* x, FibNode* y);
-    void cascadingCut(FibNode* y);
 
 public:
     FibonacciHeap();
 
-    void insertTask(const Task& t);
-    Task extractHighestPriority();
-    void decreaseTaskPriority(int id, int newPriority);
+    void insert(Task t);
+    Task getTop();
+    void pop();
     bool isEmpty() const;
-    void displayHeap() const;
-    int size() const { return nodeCount; }
+    void displayHeap();
 };
 
-#endif //FIBONACCIHEAP_H
-
-
-
+#endif // FIBONACCIHEAP_H
