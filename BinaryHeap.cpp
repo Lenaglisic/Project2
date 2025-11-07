@@ -12,13 +12,14 @@ void BinaryHeap::heapifyUp(int i) {
     {
         int p = parent(i);
         if (heap[p].priority <= heap[i].priority) break;
-        swap(heap[i], heap[p]);
+        swapNodes(heap[i], heap[p]);
         i = p;
     }
 }
 
 void BinaryHeap::heapifyDown(int i) {
     int size = heap.size();
+    while (true) {   
     int smallest = i;
     int l = left(i);
     int r = right(i);
@@ -29,7 +30,7 @@ void BinaryHeap::heapifyDown(int i) {
         smallest = r;
     }
     if (smallest != i) {
-        swap(heap[i], heap[smallest]);
+        swapNodes(heap[i], heap[smallest]);
         heapifyDown(smallest);
     }
 }
@@ -37,6 +38,7 @@ void BinaryHeap::heapifyDown(int i) {
 
 void BinaryHeap::insert(const Task& t) {
     heap.push_back(t);
+    index[t.id] = heap.size() - 1;
     heapifyUp(heap.size() - 1);
 }
 
@@ -51,17 +53,19 @@ void BinaryHeap::pop() {
     if (heap.empty()){
         throw runtime_error("Heap is empty");
     }
+    index.erase(heap[0].id);  
     heap[0] = heap.back();
     heap.pop_back();
-    heapifyDown(0);
+    if (!heap.empty()) {
+        index[heap[0].id] = 0;
+        heapifyDown(0);
+    }
 }
 
 const Task* BinaryHeap::findById(int id) const
 {
-    for (const auto& t : heap)
-    {
-        if (t.id == id) return &t;
-
-    }
-    return nullptr;
+   auto it = index.find(id);
+    if (it == index.end()) return nullptr;
+    return &heap[it->second];
 }
+
