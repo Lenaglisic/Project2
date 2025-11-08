@@ -6,7 +6,6 @@
 #include <vector>
 #include <cmath>
 #include <stdexcept>
-#include <unordered_map>
 
 struct FibNode {
     Task task;
@@ -26,7 +25,6 @@ class FibonacciHeap {
 private:
     FibNode* minNode;
     int nodeCount;
-    std::unordered_map<int, FibNode*> index;
 
     // Helpers
     void link(FibNode* y, FibNode* x);
@@ -49,4 +47,3 @@ public:
 };
 
 #endif // FIBONACCI_HEAP_H
-
