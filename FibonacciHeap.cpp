@@ -141,6 +141,7 @@ void FibonacciHeap::insertTask(const Task& t) {
     }
 
     nodeCount++;
+    index[t.id] = newNode;  
 }
 
 // Extract highest-priority (lowest value) task
@@ -180,31 +181,19 @@ Task FibonacciHeap::extractHighestPriority() {
 
     nodeCount--;
     Task result = z->task;
+    index.erase(result.id); 
     delete z;
+    nodeCount--;
     return result;
 }
 
 // Decrease task priority
 void FibonacciHeap::decreaseTaskPriority(int id, int newPriority) {
-    if (minNode == nullptr) return;
+    auto it = index.find(id);
+    if (it == index.end()) return;
+    FibNode* target = it->second;
 
-    std::queue<FibNode*> q;
-    q.push(minNode);
-    FibNode* target = nullptr;
-
-    while (!q.empty()) {
-        FibNode* n = q.front(); q.pop();
-        FibNode* start = n;
-        do {
-            if (n->task.id == id) {
-                target = n;
-                break;
-            }
-            if (n->child != nullptr)
-                q.push(n->child);
-            n = n->right;
-        } while (n != start);
-        if (target) break;
+    
     }
 
     if (target != nullptr && newPriority < target->task.priority) {
@@ -243,6 +232,7 @@ void FibonacciHeap::displayHeap() const {
 
 const Task* FibonacciHeap::findById(int id) const
 {
+    auto it = index.find(id); 
     if (minNode == nullptr) return nullptr;
 
     std::queue<FibNode*> q;
@@ -266,4 +256,5 @@ const Task* FibonacciHeap::findById(int id) const
         }
     }
     return nullptr;
+
 }
