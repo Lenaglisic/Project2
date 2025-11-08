@@ -3,9 +3,12 @@
 #include <ctime>
 #include <vector>
 #include <chrono>
+#include <random>
+#include <algorithm>
 #include "Task.h"
 #include "BinaryHeap.h"
 #include "FibonacciHeap.h"
+using namespace std;
 
 
 std::vector<std::string> taskNames = {
@@ -66,44 +69,37 @@ std::vector<std::string> taskNames = {
         "Write Reflection Paper",
         "Debug Project Code",
         "Email Professor About Grade"
-    };
+};
 
 BinaryHeap bh;
 FibonacciHeap fh;
 
-void buildBinary()
-{
-    for (int i = 0; i < 100000; i++)
-    {
-
-        int randomNum = rand() % 56;
-        bh.insert(Task (i, taskNames[randomNum], i));
-    }
-}
-
-void buildFibonacci()
-{
-    for (int i = 0; i < 100000; i++)
-    {
-
-        int randomNum = rand() % 56;
-        fh.insertTask(Task (i, taskNames[randomNum], i));
-    }
-}
-
 int main()
 {
 
+    vector<int> ids(100000);
+    for(int i = 0; i < 100000; i++){
+        ids[i] = i;
+    }
+    random_device rd;
+    mt19937 gen(rd());
+    shuffle(ids.begin(), ids.end(), gen);
+
+
     std::cout << "PRIORITY SCHEDULER SIMULATION -- BINARY HEAP VS FIBONACCI HEAP" << std::endl;
-
-
 
 
 
     srand(static_cast<unsigned int>(time(NULL)));
 
     auto t1 = std::chrono::steady_clock::now();
-    buildBinary();
+    //buildBinary();
+    for (int i = 0; i < 100000; i++)
+    {
+
+        int randomNum = rand() % 56;
+        bh.insert(Task (i, taskNames[randomNum], ids[i]));
+    }
     auto t2 = std::chrono::steady_clock::now();
     auto t3 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
 
@@ -113,7 +109,13 @@ int main()
     srand(static_cast<unsigned int>(time(NULL)));
 
     auto startFib = std::chrono::steady_clock::now();
-    buildFibonacci();
+    //buildFibonacci();
+    for (int i = 0; i < 100000; i++)
+    {
+
+        int randomNum = rand() % 56;
+        fh.insertTask(Task (i, taskNames[randomNum], ids[i]));
+    }
     auto endFib = std::chrono::steady_clock::now();
     auto fibDuration = std::chrono::duration_cast<std::chrono::milliseconds>(endFib - startFib);
 
@@ -190,12 +192,5 @@ int main()
 
         else break;
     }
-
-
-
-
-
-
     return 0;
 }
-
