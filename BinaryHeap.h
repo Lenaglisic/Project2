@@ -4,7 +4,6 @@
 #include "Task.h"
 #include <vector>
 #include <stdexcept>
-#include <unordered_map> 
 
 class BinaryHeap {
 public:
@@ -18,7 +17,6 @@ public:
 
 private:
     std::vector<Task> heap;
-    std::unordered_map<int, size_t> index;
 
     static int parent(int i) {return (i - 1) / 2;}
     static int left(int i)   {return 2 * i + 1;}
@@ -26,13 +24,6 @@ private:
 
     void heapifyUp(int i);
     void heapifyDown(int i);
-
-    void swapNodes(int a, int b) {
-        std::swap(heap[a], heap[b]);
-        index[heap[a].id] = a;
-        index[heap[b].id] = b;
-   }
 };
 
 #endif // BINARY_HEAP_H
-
